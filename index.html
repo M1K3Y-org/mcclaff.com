@@ -6,7 +6,7 @@
 <title>McClaff</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink: #0A0A12;
@@ -14,6 +14,7 @@
     --muted: #8D8CA0;
     --violet: #7C6CF0;
     --teal: #34D8C4;
+    --magenta: #E763B0;
     --glass: rgba(255,255,255,0.045);
     --glass-border: rgba(255,255,255,0.09);
   }
@@ -22,7 +23,7 @@
 
   html, body{
     margin: 0;
-    height: 100%;
+    min-height: 100%;
   }
 
   body{
@@ -33,50 +34,64 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     position: relative;
   }
 
-  /* ambient flowing gradient field — the one orchestrated motion */
+  /* aurora field — the one orchestrated motion on the page */
   .field{
     position: fixed;
-    inset: -20%;
+    inset: -25%;
     z-index: 0;
-    filter: blur(90px);
-    opacity: 0.55;
+    filter: blur(80px);
   }
 
   .blob{
     position: absolute;
     border-radius: 50%;
+    mix-blend-mode: screen;
   }
 
   .blob-a{
-    width: 46vw; height: 46vw;
-    top: 8%; left: 6%;
-    background: radial-gradient(circle at 30% 30%, var(--violet), transparent 70%);
-    animation: drift-a 22s ease-in-out infinite;
+    width: 50vw; height: 50vw;
+    top: 4%; left: 2%;
+    background: radial-gradient(circle at 30% 30%, var(--violet), transparent 68%);
+    opacity: 0.65;
+    animation: drift-a 24s ease-in-out infinite;
   }
 
   .blob-b{
-    width: 40vw; height: 40vw;
-    bottom: 4%; right: 8%;
-    background: radial-gradient(circle at 60% 60%, var(--teal), transparent 70%);
-    animation: drift-b 26s ease-in-out infinite;
+    width: 46vw; height: 46vw;
+    bottom: 0%; right: 4%;
+    background: radial-gradient(circle at 60% 60%, var(--teal), transparent 68%);
+    opacity: 0.55;
+    animation: drift-b 28s ease-in-out infinite;
+  }
+
+  .blob-c{
+    width: 38vw; height: 38vw;
+    top: 35%; left: 32%;
+    background: radial-gradient(circle at 50% 50%, var(--magenta), transparent 70%);
+    opacity: 0.35;
+    animation: drift-c 32s ease-in-out infinite;
   }
 
   @keyframes drift-a{
     0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(6%, 8%) scale(1.12); }
+    50% { transform: translate(10%, 10%) scale(1.15); }
   }
 
   @keyframes drift-b{
     0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-8%, -6%) scale(1.15); }
+    50% { transform: translate(-12%, -8%) scale(1.2); }
+  }
+
+  @keyframes drift-c{
+    0%, 100% { transform: translate(-6%, 0) rotate(0deg); }
+    50% { transform: translate(6%, -10%) rotate(20deg); }
   }
 
   @media (prefers-reduced-motion: reduce){
-    .blob-a, .blob-b { animation: none; }
+    .blob-a, .blob-b, .blob-c { animation: none; }
   }
 
   .grain{
@@ -93,16 +108,26 @@
     z-index: 2;
     width: 100%;
     max-width: 720px;
-    padding: 40px 28px;
+    padding: 60px 28px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .wordmark{
-    font-size: 28px;
-    font-weight: 800;
+  .greeting{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(34px, 6vw, 48px);
     letter-spacing: -0.01em;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .subline{
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
     margin-bottom: 56px;
   }
 
@@ -161,7 +186,7 @@
 
   @media (max-width: 560px){
     .tiles{ grid-template-columns: 1fr; }
-    .wordmark{ margin-bottom: 40px; }
+    .subline{ margin-bottom: 40px; }
   }
 </style>
 </head>
@@ -169,11 +194,13 @@
   <div class="field">
     <div class="blob blob-a"></div>
     <div class="blob blob-b"></div>
+    <div class="blob blob-c"></div>
   </div>
   <div class="grain"></div>
 
   <main>
-    <div class="wordmark">McClaff</div>
+    <div class="greeting">Welcome home</div>
+    <div class="subline">McClaff network</div>
 
     <div class="tiles">
       <a class="tile tile-a" href="https://home.mcclaff.com">
