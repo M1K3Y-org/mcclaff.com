@@ -1,16 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>McClaff</title>
-  <style>
-    body { font-family: sans-serif; background: #121212; color: #fff; text-align: center; padding-top: 50px; }
-    .btn { display: inline-block; margin: 15px; padding: 15px 25px; background: #0070f3; color: white; text-decoration: none; border-radius: 8px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>McClaff Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0A0E14;
+    --surface: #12181F;
+    --line: #232B35;
+    --text: #E4E8ED;
+    --muted: #707B8A;
+    --amber: #E8A33D;
+    --green: #5FBF7A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 64px 24px 40px;
+  }
+
+  main{
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .boot-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .wordmark{
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .uptime{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .status-line{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 28px;
+  }
+
+  .dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  /* single orchestrated motion: a pulse tracing the network's signal on load */
+  .pulse-wrap{
+    height: 60px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+
+  .pulse-wrap svg { display: block; width: 100%; height: 100%; }
+
+  .pulse-path{
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 620;
+    stroke-dashoffset: 620;
+    animation: trace 2.2s ease-out forwards;
+  }
+
+  @keyframes trace{
+    to { stroke-dashoffset: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .pulse-path{ animation: none; stroke-dashoffset: 0; }
+  }
+
+  .section-label{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  .services{
+    border-top: 1px solid var(--line);
+  }
+
+  .service{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .service-info{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .service-name-row{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .service-dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+
+  .service-name{
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .service-host{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+  }
+
+  .service-desc{
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .connect{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    padding: 7px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .service:hover .connect{
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  footer{
+    margin-top: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 480px){
+    .service{ flex-direction: column; align-items: flex-start; }
+    .connect{ align-self: flex-start; }
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to McClaff Network</h1>
-  <a class="btn" href="https://home.mcclaff.com">Home Assistant</a>
-  <a class="btn" href="https://drive.mcclaff.com">Nextcloud Storage</a>
+  <main>
+    <div class="boot-row">
+      <div class="wordmark">McClaff</div>
+      <div class="uptime">uptime 42d 07h</div>
+    </div>
+    <div class="status-line"><span class="dot"></span>network online</div>
+
+    <div class="pulse-wrap">
+      <svg viewBox="0 0 600 60" preserveAspectRatio="none">
+        <path class="pulse-path" d="M0,30 L120,30 L140,10 L160,50 L180,30 L260,30 L280,15 L300,45 L320,30 L600,30" />
+      </svg>
+    </div>
+
+    <div class="section-label">connected services</div>
+    <div class="services">
+      <a class="service" href="https://home.mcclaff.com">
+        <div class="service-info">
+          <div class="service-name-row">
+            <span class="service-dot"></span>
+            <span class="service-name">Home Assistant</span>
+          </div>
+          <div class="service-host">home.mcclaff.com</div>
+          <div class="service-desc">Lights, climate, and automations</div>
+        </div>
+        <div class="connect">connect →</div>
+      </a>
+      <a class="service" href="https://drive.mcclaff.com">
+        <div class="service-info">
+          <div class="service-name-row">
+            <span class="service-dot"></span>
+            <span class="service-name">Nextcloud Storage</span>
+          </div>
+          <div class="service-host">drive.mcclaff.com</div>
+          <div class="service-desc">Files, photos, and backups</div>
+        </div>
+        <div class="connect">connect →</div>
+      </a>
+    </div>
+
+    <footer>2 services · self-hosted</footer>
+  </main>
 </body>
 </html>
