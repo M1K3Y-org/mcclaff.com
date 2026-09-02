@@ -3,233 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>McClaff Network</title>
+<title>McClaff</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink: #0A0E14;
-    --surface: #12181F;
-    --line: #232B35;
-    --text: #E4E8ED;
-    --muted: #707B8A;
-    --amber: #E8A33D;
-    --green: #5FBF7A;
+    --ink: #0A0A12;
+    --text: #F3F2F8;
+    --muted: #8D8CA0;
+    --violet: #7C6CF0;
+    --teal: #34D8C4;
+    --glass: rgba(255,255,255,0.045);
+    --glass-border: rgba(255,255,255,0.09);
   }
 
-  * { box-sizing: border-box; }
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    height: 100%;
+  }
 
   body{
-    margin: 0;
     background: var(--ink);
     color: var(--text);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Inter', sans-serif;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
-    padding: 64px 24px 40px;
-  }
-
-  main{
-    width: 100%;
-    max-width: 640px;
-  }
-
-  .boot-row{
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 4px;
-  }
-
-  .wordmark{
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-
-  .uptime{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .status-line{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--green);
-    display: flex;
     align-items: center;
-    gap: 7px;
-    margin-bottom: 28px;
-  }
-
-  .dot{
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
-  }
-
-  /* single orchestrated motion: a pulse tracing the network's signal on load */
-  .pulse-wrap{
-    height: 60px;
-    margin-bottom: 36px;
+    justify-content: center;
     overflow: hidden;
+    position: relative;
   }
 
-  .pulse-wrap svg { display: block; width: 100%; height: 100%; }
-
-  .pulse-path{
-    fill: none;
-    stroke: var(--amber);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-dasharray: 620;
-    stroke-dashoffset: 620;
-    animation: trace 2.2s ease-out forwards;
+  /* ambient flowing gradient field — the one orchestrated motion */
+  .field{
+    position: fixed;
+    inset: -20%;
+    z-index: 0;
+    filter: blur(90px);
+    opacity: 0.55;
   }
 
-  @keyframes trace{
-    to { stroke-dashoffset: 0; }
+  .blob{
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .blob-a{
+    width: 46vw; height: 46vw;
+    top: 8%; left: 6%;
+    background: radial-gradient(circle at 30% 30%, var(--violet), transparent 70%);
+    animation: drift-a 22s ease-in-out infinite;
+  }
+
+  .blob-b{
+    width: 40vw; height: 40vw;
+    bottom: 4%; right: 8%;
+    background: radial-gradient(circle at 60% 60%, var(--teal), transparent 70%);
+    animation: drift-b 26s ease-in-out infinite;
+  }
+
+  @keyframes drift-a{
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(6%, 8%) scale(1.12); }
+  }
+
+  @keyframes drift-b{
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-8%, -6%) scale(1.15); }
   }
 
   @media (prefers-reduced-motion: reduce){
-    .pulse-path{ animation: none; stroke-dashoffset: 0; }
+    .blob-a, .blob-b { animation: none; }
   }
 
-  .section-label{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-    margin-bottom: 12px;
+  .grain{
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.035;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  .services{
-    border-top: 1px solid var(--line);
-  }
-
-  .service{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--line);
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .service-info{
+  main{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 720px;
+    padding: 40px 28px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    min-width: 0;
-  }
-
-  .service-name-row{
-    display: flex;
     align-items: center;
-    gap: 8px;
   }
 
-  .service-dot{
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    flex-shrink: 0;
+  .wordmark{
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 56px;
   }
 
-  .service-name{
+  .tiles{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    width: 100%;
+  }
+
+  .tile{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 32px 26px;
+    border-radius: 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .tile:hover{
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .tile:active{
+    transform: translateY(-1px);
+  }
+
+  .icon{
+    width: 34px;
+    height: 34px;
+    stroke: var(--text);
+  }
+
+  .tile-a .icon{ stroke: var(--violet); }
+  .tile-b .icon{ stroke: var(--teal); }
+
+  .tile-name{
     font-size: 17px;
     font-weight: 600;
   }
 
-  .service-host{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--amber);
-  }
-
-  .service-desc{
-    font-size: 13px;
+  .tile-desc{
+    font-size: 13.5px;
     color: var(--muted);
+    line-height: 1.5;
+    margin-top: -10px;
   }
 
-  .connect{
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    padding: 7px 12px;
-    border-radius: 4px;
-    white-space: nowrap;
-    transition: border-color 0.15s ease, color 0.15s ease;
-  }
-
-  .service:hover .connect{
-    border-color: var(--amber);
-    color: var(--amber);
-  }
-
-  footer{
-    margin-top: 32px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  @media (max-width: 480px){
-    .service{ flex-direction: column; align-items: flex-start; }
-    .connect{ align-self: flex-start; }
+  @media (max-width: 560px){
+    .tiles{ grid-template-columns: 1fr; }
+    .wordmark{ margin-bottom: 40px; }
   }
 </style>
 </head>
 <body>
+  <div class="field">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+  </div>
+  <div class="grain"></div>
+
   <main>
-    <div class="boot-row">
-      <div class="wordmark">McClaff</div>
-      <div class="uptime">uptime 42d 07h</div>
-    </div>
-    <div class="status-line"><span class="dot"></span>network online</div>
+    <div class="wordmark">McClaff</div>
 
-    <div class="pulse-wrap">
-      <svg viewBox="0 0 600 60" preserveAspectRatio="none">
-        <path class="pulse-path" d="M0,30 L120,30 L140,10 L160,50 L180,30 L260,30 L280,15 L300,45 L320,30 L600,30" />
-      </svg>
-    </div>
-
-    <div class="section-label">connected services</div>
-    <div class="services">
-      <a class="service" href="https://home.mcclaff.com">
-        <div class="service-info">
-          <div class="service-name-row">
-            <span class="service-dot"></span>
-            <span class="service-name">Home Assistant</span>
-          </div>
-          <div class="service-host">home.mcclaff.com</div>
-          <div class="service-desc">Lights, climate, and automations</div>
-        </div>
-        <div class="connect">connect →</div>
+    <div class="tiles">
+      <a class="tile tile-a" href="https://home.mcclaff.com">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11.5 12 4l9 7.5" />
+          <path d="M5.5 10v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9" />
+          <path d="M9.5 20v-6h5v6" />
+        </svg>
+        <div class="tile-name">Home Assistant</div>
+        <div class="tile-desc">Lights, climate, and automations for the house</div>
       </a>
-      <a class="service" href="https://drive.mcclaff.com">
-        <div class="service-info">
-          <div class="service-name-row">
-            <span class="service-dot"></span>
-            <span class="service-name">Nextcloud Storage</span>
-          </div>
-          <div class="service-host">drive.mcclaff.com</div>
-          <div class="service-desc">Files, photos, and backups</div>
-        </div>
-        <div class="connect">connect →</div>
+
+      <a class="tile tile-b" href="https://drive.mcclaff.com">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 18a4.5 4.5 0 0 1-.4-8.98A5.5 5.5 0 0 1 17.2 8.1 4 4 0 0 1 17 16" transform="translate(0,-0.5)" />
+          <path d="M7 18h10" />
+        </svg>
+        <div class="tile-name">Nextcloud</div>
+        <div class="tile-desc">Files, photos, and backups, all in one place</div>
       </a>
     </div>
-
-    <footer>2 services · self-hosted</footer>
   </main>
 </body>
 </html>
